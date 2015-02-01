@@ -1,5 +1,6 @@
 import factory
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 class UserFactory(factory.DjangoModelFactory):
     FACTORY_FOR = User

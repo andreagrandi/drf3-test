@@ -111,7 +111,7 @@ REST_FRAMEWORK = {
     )
 }
 
-PROJECT_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), "../"))
-TEST_DISCOVER_TOP_LEVEL = PROJECT_ROOT
-TEST_DISCOVER_ROOT = PROJECT_ROOT
-TEST_DISCOVER_PATTERN = "test_*"
+#PROJECT_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), "../"))
+#TEST_DISCOVER_TOP_LEVEL = PROJECT_ROOT
+#TEST_DISCOVER_ROOT = PROJECT_ROOT
+#TEST_DISCOVER_PATTERN = "test_*"
