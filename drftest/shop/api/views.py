@@ -3,10 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from django.db import transaction
 
 class ShopAPIView(APIView):
     permission_classes = (IsAuthenticated,)
-
 
 class OrdersView(ShopAPIView):
     """
@@ -15,4 +15,5 @@ class OrdersView(ShopAPIView):
     at the end voucher(s) are created if there are enough stamps available for that user.
     """
     def post(self, request, format=None):
-        return Response({'success': True})
+        with transaction.atomic():
+            return Response({'success': True})
