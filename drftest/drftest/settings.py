@@ -110,8 +110,3 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     )
 }
-
-#PROJECT_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), "../"))
-#TEST_DISCOVER_TOP_LEVEL = PROJECT_ROOT
-#TEST_DISCOVER_ROOT = PROJECT_ROOT
-#TEST_DISCOVER_PATTERN = "test_*"
