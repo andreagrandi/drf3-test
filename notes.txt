@@ -2,10 +2,25 @@ Models
 ------
 
 - product
+	- name
+	- collect_stamp
+
 - stamp
+	- user
+	- used
+
 - order
+	- user
+	- date
+
 - order_details
+	- order
+	- product
+	- quantity
+
 - voucher
+	- user
+	- redeemed
 
 API
 ---
