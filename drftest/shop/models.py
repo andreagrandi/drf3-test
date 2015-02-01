@@ -4,15 +4,15 @@ from django.contrib.auth.models import User
 
 class Product(models.Model):
 	name = models.CharField(max_length=255)
-	collect_stamp = models.BooleanField()
+	collect_stamp = models.BooleanField(default=False)
 
 
 class Stamp(models.Model):
 	user = models.ForeignKey(User)
-	redeemed = models.BooleanField()
+	redeemed = models.BooleanField(default=False)
 
 
-class Order(model.Model):
+class Order(models.Model):
 	user = models.ForeignKey(User)
 	date = models.DateTimeField(auto_now=False, auto_now_add=False)
 
@@ -25,4 +25,4 @@ class OrderDetails(models.Model):
 
 class Voucher(models.Model):
 	user = models.ForeignKey(User)
-	redeemed = models.BooleanField()
+	redeemed = models.BooleanField(default=False)
