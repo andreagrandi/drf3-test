@@ -2,51 +2,51 @@ Models
 ------
 
 - product
-	- name
-	- collect_stamp
+    - name
+    - collect_stamp
 
 - stamp
-	- user
-	- redeemed
+    - user
+    - redeemed
 
 - order
-	- user
-	- date
+    - user
+    - date
 
 - order_details
-	- order
-	- product
-	- quantity
+    - order
+    - product
+    - quantity
 
 - voucher
-	- user
-	- redeemed
+    - user
+    - redeemed
 
 API
 ---
 
 /shop/orders (POST):
-	
-	Place an order. Create the "order" record with general informations, create the "order_details" records with
-	the details of the order. During this transaction any stamp earned by the user is added to the database and
-	at the end voucher(s) are created if there are enough stamps available for that user.
+    
+    Place an order. Create the "order" record with general informations, create the "order_details" records with
+    the details of the order. During this transaction any stamp earned by the user is added to the database and
+    at the end voucher(s) are created if there are enough stamps available for that user.
 
 /shop/stamps (GET):
-	
-	Return the available stamps for the current user.
+    
+    Return the available stamps for the current user.
 
 /shop/stamps (POST):
 
-	Add one stamp to the current user.
+    Add one stamp to the current user.
 
 /shop/vouchers (GET):
 
-	Return the available vouchers for the current user.
+    Return the available vouchers for the current user.
 
 /shop/vouchers (POST):
 
-	Add one voucher to the current user.
+    Add one voucher to the current user.
 
 /shop/vouchers (PUT):
 
-	Mark a voucher as redeemed.
+    Mark a voucher as redeemed.
