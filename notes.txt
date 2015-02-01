@@ -7,7 +7,7 @@ Models
 
 - stamp
 	- user
-	- used
+	- redeemed
 
 - order
 	- user
