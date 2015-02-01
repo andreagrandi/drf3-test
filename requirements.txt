@@ -1,0 +1,5 @@
+Django==1.7.4
+djangorestframework==3.0.4
+factory-boy==2.4.1
+psycopg2==2.5.4
+wsgiref==0.1.2
