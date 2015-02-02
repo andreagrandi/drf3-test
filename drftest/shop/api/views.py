@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
+from rest_framework import status
 from django.db import transaction
 from django.utils.timezone import now
 from .serializers import OrderSerializer
@@ -51,3 +52,5 @@ class OrdersView(ShopAPIView):
                     Stamp.objects.filter(pk__in=stamps_to_use).update(redeemed=True)
 
                 return Response({'success': True})
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

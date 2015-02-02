@@ -26,3 +26,14 @@ class ShopAPITestCase(TestCase):
         self.assertEqual(Stamp.objects.count(), 26)
         self.assertEqual(Stamp.objects.filter(redeemed=False).count(), 6)
         self.assertEqual(Voucher.objects.count(), 2)
+
+    def test_order_post_invalid_product(self):
+        ProductFactory.create(name='Widget', collect_stamp=True)
+        prod_2 = ProductFactory.create(name='Gizmo', collect_stamp=False)
+
+        url = reverse('shop-api:shop_orders', )
+        data = [{"product": 1234, "quantity": 26},
+            {"product": prod_2.id, "quantity": 30}]
+
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, 400)
