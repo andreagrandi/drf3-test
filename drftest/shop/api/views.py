@@ -83,3 +83,8 @@ class VouchersView(ShopAPIView):
         voucher = Voucher(user=request.user)
         voucher.save()
         return Response({'voucher': voucher.id, 'success': True}, status=status.HTTP_201_CREATED)
+
+    def put(self, request, format=None):
+        voucher_id = request.DATA.get('voucher')
+        Voucher.objects.filter(id=voucher_id, user=request.user).update(redeemed=True)
+        return Response({'voucher': voucher_id, 'success': True}, status=status.HTTP_200_OK)

@@ -49,7 +49,7 @@ class ShopAPITestCase(TestCase):
 
         url = reverse('shop-api:shop_stamps', )
         response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['stamps'], 4)
 
     def test_add_stamp_to_user(self):
@@ -69,7 +69,7 @@ class ShopAPITestCase(TestCase):
 
         url = reverse('shop-api:shop_vouchers', )
         response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['vouchers'], 3)
 
     def test_add_voucher_to_user(self):
@@ -79,3 +79,12 @@ class ShopAPITestCase(TestCase):
         self.assertEqual(response.data['success'], True)
         self.assertTrue(response.data['voucher'] > 0)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_mark_voucher_redeemed(self):
+        voucher = VoucherFactory.create(user=self.user)
+        url = reverse('shop-api:shop_vouchers', )
+        data = {'voucher': voucher.id}
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        voucher_modified = Voucher.objects.get(id=voucher.id)
+        self.assertEqual(voucher_modified.redeemed, True)
