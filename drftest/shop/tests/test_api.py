@@ -50,3 +50,10 @@ class ShopAPITestCase(TestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['stamps'], 4)
+
+    def test_add_stamp_to_user(self):
+        url = reverse('shop-api:shop_stamps', )
+        response = self.client.post(url, format='json')
+        self.assertEqual(Stamp.objects.count(), 1)
+        self.assertEqual(response.data['success'], True)
+        self.assertTrue(response.data['stamp'] > 0)

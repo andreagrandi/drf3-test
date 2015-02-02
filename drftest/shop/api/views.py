@@ -63,3 +63,8 @@ class StampsView(ShopAPIView):
     def get(self, request, format=None):
         stamps = Stamp.objects.filter(user=request.user, redeemed=False).count()
         return Response({'stamps': stamps})
+
+    def post(self, request, format=None):
+        stamp = Stamp(user=request.user)
+        stamp.save()
+        return Response({'stamp': stamp.id, 'success': True})
