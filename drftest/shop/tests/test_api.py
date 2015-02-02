@@ -1,7 +1,7 @@
 from rest_framework.test import APIClient
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from .factories import UserFactory, ProductFactory, StampFactory
+from .factories import UserFactory, ProductFactory, StampFactory, VoucherFactory
 from shop.models import Order, OrderDetails, Stamp, Voucher
 
 class ShopAPITestCase(TestCase):
@@ -57,3 +57,15 @@ class ShopAPITestCase(TestCase):
         self.assertEqual(Stamp.objects.count(), 1)
         self.assertEqual(response.data['success'], True)
         self.assertTrue(response.data['stamp'] > 0)
+
+    def test_get_available_vouchers(self):
+        VoucherFactory.create(user=self.user, redeemed=False)
+        VoucherFactory.create(user=self.user, redeemed=False)
+        VoucherFactory.create(user=self.user, redeemed=False)
+        VoucherFactory.create(user=self.user, redeemed=True)
+        VoucherFactory.create(user=self.user, redeemed=True)
+
+        url = reverse('shop-api:shop_vouchers', )
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['vouchers'], 3)

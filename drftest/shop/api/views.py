@@ -58,7 +58,8 @@ class OrdersView(ShopAPIView):
 
 class StampsView(ShopAPIView):
     """
-    Return the available Stamps for the current user
+    GET: Return the available Stamps for the current user
+    POST: Add a Stamp to the current user
     """
     def get(self, request, format=None):
         stamps = Stamp.objects.filter(user=request.user, redeemed=False).count()
@@ -68,3 +69,12 @@ class StampsView(ShopAPIView):
         stamp = Stamp(user=request.user)
         stamp.save()
         return Response({'stamp': stamp.id, 'success': True})
+
+
+class VouchersView(ShopAPIView):
+    """
+    GET: return the available Vouchers for the current user
+    """
+    def get(self, request, format=None):
+        vouchers = Voucher.objects.filter(user=request.user, redeemed=False).count()
+        return Response({'vouchers': vouchers})
