@@ -5,7 +5,7 @@ from rest_framework.parsers import JSONParser
 from django.db import transaction
 from django.utils.timezone import now
 from .serializers import OrderSerializer
-from shop.models import Order, OrderDetails, Product, Stamp
+from shop.models import Order, OrderDetails, Product, Stamp, Voucher
 
 class ShopAPIView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -39,5 +39,15 @@ class OrdersView(ShopAPIView):
                     if product.collect_stamp:
                         for i in xrange(detail.quantity):
                             Stamp(user=request.user).save()
+
+                # Generate Vouchers
+                vouchers_to_create = Stamp.objects.filter(
+                    user=request.user, redeemed=False).count() // 10
+
+                for i in xrange(vouchers_to_create):
+                    Voucher(user=request.user).save()
+                    stamps_to_use = Stamp.objects.filter(
+                        user=request.user, redeemed=False).values('pk')[:10]
+                    Stamp.objects.filter(pk__in=stamps_to_use).update(redeemed=True)
 
                 return Response({'success': True})
