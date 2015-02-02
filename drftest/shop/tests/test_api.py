@@ -1,7 +1,7 @@
 from rest_framework.test import APIClient
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from .factories import UserFactory, ProductFactory
+from .factories import UserFactory, ProductFactory, StampFactory
 from shop.models import Order, OrderDetails, Stamp, Voucher
 
 class ShopAPITestCase(TestCase):
@@ -37,3 +37,16 @@ class ShopAPITestCase(TestCase):
 
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, 400)
+
+    def test_get_available_stamps(self):
+        StampFactory.create(user=self.user, redeemed=False)
+        StampFactory.create(user=self.user, redeemed=False)
+        StampFactory.create(user=self.user, redeemed=False)
+        StampFactory.create(user=self.user, redeemed=False)
+        StampFactory.create(user=self.user, redeemed=True)
+        StampFactory.create(user=self.user, redeemed=True)
+
+        url = reverse('shop-api:shop_stamps', )
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['stamps'], 4)

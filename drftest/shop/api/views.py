@@ -54,3 +54,12 @@ class OrdersView(ShopAPIView):
                 return Response({'success': True})
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StampsView(ShopAPIView):
+    """
+    Return the available Stamps for the current user
+    """
+    def get(self, request, format=None):
+        stamps = Stamp.objects.filter(user=request.user, redeemed=False).count()
+        return Response({'stamps': stamps})
