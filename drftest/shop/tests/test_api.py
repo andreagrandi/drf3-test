@@ -1,4 +1,5 @@
 from rest_framework.test import APIClient
+from rest_framework import status
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from .factories import UserFactory, ProductFactory, StampFactory, VoucherFactory
@@ -19,7 +20,7 @@ class ShopAPITestCase(TestCase):
             {"product": prod_2.id, "quantity": 30}]
 
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['success'], True)
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderDetails.objects.count(), 2)
@@ -36,7 +37,7 @@ class ShopAPITestCase(TestCase):
             {"product": prod_2.id, "quantity": 30}]
 
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_get_available_stamps(self):
         StampFactory.create(user=self.user, redeemed=False)
@@ -57,6 +58,7 @@ class ShopAPITestCase(TestCase):
         self.assertEqual(Stamp.objects.count(), 1)
         self.assertEqual(response.data['success'], True)
         self.assertTrue(response.data['stamp'] > 0)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_get_available_vouchers(self):
         VoucherFactory.create(user=self.user, redeemed=False)
@@ -69,3 +71,11 @@ class ShopAPITestCase(TestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['vouchers'], 3)
+
+    def test_add_voucher_to_user(self):
+        url = reverse('shop-api:shop_vouchers', )
+        response = self.client.post(url, format='json')
+        self.assertEqual(Voucher.objects.count(), 1)
+        self.assertEqual(response.data['success'], True)
+        self.assertTrue(response.data['voucher'] > 0)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)

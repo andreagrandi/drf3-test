@@ -51,7 +51,7 @@ class OrdersView(ShopAPIView):
                         user=request.user, redeemed=False).values('pk')[:10]
                     Stamp.objects.filter(pk__in=stamps_to_use).update(redeemed=True)
 
-                return Response({'success': True})
+                return Response({'success': True}, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -68,7 +68,7 @@ class StampsView(ShopAPIView):
     def post(self, request, format=None):
         stamp = Stamp(user=request.user)
         stamp.save()
-        return Response({'stamp': stamp.id, 'success': True})
+        return Response({'stamp': stamp.id, 'success': True}, status=status.HTTP_201_CREATED)
 
 
 class VouchersView(ShopAPIView):
@@ -78,3 +78,8 @@ class VouchersView(ShopAPIView):
     def get(self, request, format=None):
         vouchers = Voucher.objects.filter(user=request.user, redeemed=False).count()
         return Response({'vouchers': vouchers})
+
+    def post(self, request, format=None):
+        voucher = Voucher(user=request.user)
+        voucher.save()
+        return Response({'voucher': voucher.id, 'success': True}, status=status.HTTP_201_CREATED)
