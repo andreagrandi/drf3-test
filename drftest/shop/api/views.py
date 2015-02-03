@@ -13,9 +13,16 @@ class ShopAPIView(APIView):
 
 class OrdersView(ShopAPIView):
     """
-    Place an order. Create the "order" record with general informations, create the "order_details" records with
-    the details of the order. During this transaction any stamp earned by the user is added to the database and
-    at the end voucher(s) are created if there are enough stamps available for that user.
+    Place an order. Create the "order" record with general informations, create the "order_details" 
+    records with the details of the order. During this transaction any stamp earned by the user is 
+    added to the database and at the end voucher(s) are created if there are enough stamps available 
+    for that user.
+
+        POST:
+            Example: [{"product": 1, "quantity": 26},
+                        {"product": 2, "quantity": 30}]
+            Response: {'success': true}
+
     """
     def post(self, request, format=None):
         with transaction.atomic():
@@ -45,6 +52,7 @@ class OrdersView(ShopAPIView):
                 vouchers_to_create = Stamp.objects.filter(
                     user=request.user, redeemed=False).count() // 10
 
+                # Mark as redeemed all the Stamps used to create Vouchers
                 for i in xrange(vouchers_to_create):
                     Voucher(user=request.user).save()
                     stamps_to_use = Stamp.objects.filter(
@@ -58,8 +66,18 @@ class OrdersView(ShopAPIView):
 
 class StampsView(ShopAPIView):
     """
-    GET: Return the available Stamps for the current user
-    POST: Add a Stamp to the current user
+    This API method returns the total number of Stamps available for a user and allows to create
+    a new one.
+
+        GET: return the Stamps for the current user
+
+            Example: /shop/stamps
+            Response: {'stamps': 12}
+
+        POST: Add a Stamp to the current user
+
+            Example: /shop/stamps
+            Response: {'stamp': 1, 'success': true}
     """
     def get(self, request, format=None):
         stamps = Stamp.objects.filter(user=request.user, redeemed=False).count()
@@ -73,7 +91,26 @@ class StampsView(ShopAPIView):
 
 class VouchersView(ShopAPIView):
     """
-    GET: return the available Vouchers for the current user
+    This API method returns the total number of Vouchers available for the user, allows the creation
+    of a new Voucher and finally permits to mark a specific Voucher as redeemed.
+    NOTE: the POST method doesn't consume any Stamps when adding a new Voucher. Stamps are consumed
+        to generate a Voucher only during an Order placement. For consistency, when we manually add
+        a Stamp we don't check if a widget was ordered. This check is only made during Order placement.
+
+        GET: return the available Vouchers for the current user
+
+            Example: /shops/vouchers
+            Response: {'vouchers': 10}
+
+        POST: add a new Voucher to the user
+
+            Example: /shops/voucher
+            Response: {'voucher': 1, 'success': true}
+
+        PUT: mark a Voucher as redeemed
+
+            Example: /shops/voucher
+            Response: {'voucher': 1, 'success': true}
     """
     def get(self, request, format=None):
         vouchers = Voucher.objects.filter(user=request.user, redeemed=False).count()
