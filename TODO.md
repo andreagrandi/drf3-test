@@ -1,6 +1,7 @@
 # TODO List
 
-    * Deployment on Heroku
-    * Improve API documentation
-    * Prepare some fixtures for the database
-    * Write a small client using requests to consume the live API
+    x Deployment on Heroku
+    x Improve API documentation
+    x Prepare some fixtures for the database
+    x Write a small client using requests to consume the live API
+    * Generate documentation from docstrings
