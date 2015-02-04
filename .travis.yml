@@ -1,0 +1,25 @@
+language: python
+python:
+- '2.7'
+install: pip install -r requirements.txt
+env:
+  global:
+    - DRFTEST_ADMIN_NAME="Your Name"
+    - DRFTEST_ADMIN_EMAIL="user@email.com"
+    - DRFTEST_DB_ENGINE="django.db.backends.postgresql_psycopg2"
+    - DRFTEST_DB_NAME="travis_ci_test"
+    - DRFTEST_DB_USER="postgres"
+    - DRFTEST_DB_PASSWORD=""
+    - DRFTEST_DB_HOST="localhost"
+    - DRFTEST_DB_PORT=5432
+    - DRFTEST_STATIC_ROOT=""
+    - DRFTEST_STATIC_URL="/static/"
+    - DRFTEST_STATICFILES_ASSETS="static"
+    - DRFTEST_SECRET_KEY="$$changethisdamnnotsecretkey"
+    - DRFTEST_DEBUG="True"
+    - DRFTEST_ALLOWED_HOSTS="*"
+addons:
+  postgresql: "9.3"
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+script: drftest/manage.py test
