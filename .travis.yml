@@ -22,6 +22,6 @@ addons:
   postgresql: "9.3"
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
-script: cd drftest ; coverage run --omit=*.virtualenvs*,*virtualenv* python manage.py test
+script: cd drftest ; coverage run --omit=*.virtualenvs*,*virtualenv* manage.py test
 after_success:
 - coveralls
