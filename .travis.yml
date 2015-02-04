@@ -22,4 +22,4 @@ addons:
   postgresql: "9.3"
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
-script: drftest/manage.py test shop
+script: cd drftest ; python manage.py test
