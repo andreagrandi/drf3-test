@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Drf3test Documentation</title>
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script>
+  <script src="./js/theme.js"></script>
+
+  <style>
+    body {font-size: 90%;}
+    pre, code {font-size: 100%;}
+    h3, h4, h5, h6 {color: #2980b9; font-weight: 300}
+  </style> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> Drf3test Documentation</a>
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+      <ul class="current">
+    
+</ul>
+
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href="."></a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    <li>Home</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              <h1 id="welcome-to-drf3test">Welcome to Drf3test</h1>
+<p>Drf3test is a very simple API implemented using <a href="http://www.django-rest-framework.org/">Django Rest Framework</a></p>
+<h2 id="api">API</h2>
+<h3 id="orders">Orders</h3>
+<ul>
+<li><strong>POST</strong> <code>/shop/order</code> - <strong>Place an Order</strong></li>
+</ul>
+<p>Create the "order" record with general informations, create the "order_details"
+records with the details of the order. During this transaction any stamp earned by the user is
+added to the database and at the end voucher(s) are created if there are enough stamps available
+for that user.</p>
+<p>Example:</p>
+<pre><code>[{"product": 1, "quantity": 26}, {"product": 2, "quantity": 30}]
+</code></pre>
+<p>Response:</p>
+<pre><code>{'success': true}
+</code></pre>
+<h3 id="stamps">Stamps</h3>
+<ul>
+<li><strong>GET</strong> <code>/shop/stamps</code> - <strong>Get Stamps</strong></li>
+</ul>
+<p>This API method returns the total number of Stamps available for a user and allows to create
+a new one.</p>
+<p>Example:</p>
+<pre><code>GET /shop/stamps
+</code></pre>
+<p>Response:</p>
+<pre><code>{'stamps': 12}
+</code></pre>
+<ul>
+<li><strong>POST</strong> <code>/shop/stamps</code> - <strong>Add a Stamp to the current user</strong></li>
+</ul>
+<p>Example:</p>
+<pre><code>POST /shop/stamps
+</code></pre>
+<p>Response:</p>
+<pre><code>{'stamp': 1, 'success': true}
+</code></pre>
+<h3 id="vouchers">Vouchers</h3>
+<p>This API method returns the total number of Vouchers available for the user, allows the creation
+of a new Voucher and finally permits to mark a specific Voucher as redeemed.</p>
+<p><strong>NOTE:</strong> the POST method doesn't consume any Stamps when adding a new Voucher. Stamps are consumed
+to generate a Voucher only during an Order placement. For consistency, when we manually add
+a Stamp we don't check if a widget was ordered. This check is only made during Order placement.</p>
+<ul>
+<li><strong>GET</strong> <code>/shop/vouchers</code> - <strong>Get Vouchers</strong></li>
+</ul>
+<p>Example: </p>
+<pre><code>/shops/vouchers
+</code></pre>
+<p>Response:</p>
+<pre><code>{'vouchers': 10}
+</code></pre>
+<ul>
+<li><strong>POST</strong> <code>/shop/vouchers</code> - <strong>Create a Voucher</strong></li>
+</ul>
+<p>Example: </p>
+<pre><code>/shops/voucher
+</code></pre>
+<p>Response: </p>
+<pre><code>{'voucher': 1, 'success': true}
+</code></pre>
+<ul>
+<li><strong>PUT</strong> <code>/shop/vouchers</code> - <strong>Set a Voucher as redeemed</strong></li>
+</ul>
+<p>Example: </p>
+<pre><code>/shops/voucher
+</code></pre>
+<p>Response: </p>
+<pre><code>{'voucher': 1, 'success': true}
+</code></pre>
+<h2 id="client">Client</h2>
+<p>Under drftestclient/ folder of the project there is a very simple client written using <strong>requests</strong>
+library. To use it you first need to set the <strong>token</strong> (available in private) in the env variable:</p>
+<pre><code>export DRFTEST_TOKEN='abc123'
+</code></pre>
+<p>At this point start a Python shell and you can start using the client like this:</p>
+<pre><code>import drftestclient
+drftestclient.place_order()
+drftestclient.get_stamps()
+drftestclient.get_vouchers()
+</code></pre>
+
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+    <!-- Copyright etc -->
+    </p>
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        
+      <span><a href="" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      <span style="margin-left: 15px"><a href="" style="color: #fcfcfc">Next &raquo;</a></span>
+    </span>
+</div>
+</body>
+</html>
