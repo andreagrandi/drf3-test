@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
+    # Setting this field to True means that this Product will let customer to collect Stamps
     collect_stamp = models.BooleanField(default=False)
 
 
