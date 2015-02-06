@@ -38,6 +38,7 @@ class ShopAPITestCase(TestCase):
 
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertTrue('Invalid product' in response.content)
 
     def test_get_available_stamps(self):
         StampFactory.create(user=self.user, redeemed=False)
