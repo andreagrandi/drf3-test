@@ -30,7 +30,14 @@ class ShopVoucherSerializer(TestCase):
         serializer = VoucherSerializer(data=data)
         self.assertTrue(serializer.is_valid())
 
-    def test_voucher_serializer_invalid_voucher(self):
+    def test_voucher_serializer_invalid_voucher_format(self):
         data  = {'voucher': 'abc123'}
         serializer = VoucherSerializer(data=data)
         self.assertFalse(serializer.is_valid())
+        self.assertTrue('A valid integer is required.' in serializer.errors['voucher'])
+
+    def test_voucher_serializer_invalid_voucher_id(self):
+        data  = {'voucher': 100}
+        serializer = VoucherSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertTrue('Invalid voucher' in serializer.errors['voucher'][0])
