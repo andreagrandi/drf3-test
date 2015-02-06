@@ -5,7 +5,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 from django.db import transaction
 from django.utils.timezone import now
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer, VoucherSerializer
 from shop.models import Order, OrderDetails, Product, Stamp, Voucher
 
 class ShopAPIView(APIView):
@@ -122,6 +122,12 @@ class VouchersView(ShopAPIView):
         return Response({'voucher': voucher.id, 'success': True}, status=status.HTTP_201_CREATED)
 
     def put(self, request, format=None):
-        voucher_id = request.DATA.get('voucher')
-        Voucher.objects.filter(id=voucher_id, user=request.user).update(redeemed=True)
-        return Response({'voucher': voucher_id, 'success': True}, status=status.HTTP_200_OK)
+        data = JSONParser().parse(request)
+        serializer = VoucherSerializer(data=data)
+
+        if serializer.is_valid():
+            voucher_id = serializer.data['voucher']
+            Voucher.objects.filter(id=voucher_id, user=request.user).update(redeemed=True)
+            return Response({'voucher': voucher_id, 'success': True}, status=status.HTTP_200_OK)
+        else:
+            return Response('Invalid voucher', status=status.HTTP_400_BAD_REQUEST)

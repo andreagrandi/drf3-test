@@ -89,3 +89,10 @@ class ShopAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         voucher_modified = Voucher.objects.get(id=voucher.id)
         self.assertEqual(voucher_modified.redeemed, True)
+
+    def test_invalid_voucher_update(self):
+        VoucherFactory.create(user=self.user)
+        url = reverse('shop-api:shop_vouchers', )
+        data = {'voucher': 'abc123'}
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
