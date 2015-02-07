@@ -10,13 +10,17 @@ class ShopOrderSerializerTestCase(TestCase):
     def test_order_serializer_valid_order(self):
         data = [{"product": self.product_1.id, "quantity": 26},
             {"product": self.product_2.id, "quantity": 30}]
+
         serializer = OrderSerializer(data=data, many=True)
+
         self.assertTrue(serializer.is_valid())
 
     def test_order_serializer_invalid_order(self):
         data = [{"product": 'abc123', "quantity": 26},
             {"product": self.product_2.id, "quantity": 30}]
+
         serializer = OrderSerializer(data=data, many=True)
+
         self.assertFalse(serializer.is_valid())
 
 
@@ -27,17 +31,23 @@ class ShopVoucherSerializer(TestCase):
 
     def test_voucher_serializer_valid_voucher(self):
         data  = {'voucher': self.voucher.id}
+
         serializer = VoucherSerializer(data=data)
+
         self.assertTrue(serializer.is_valid())
 
     def test_voucher_serializer_invalid_voucher_format(self):
         data  = {'voucher': 'abc123'}
+
         serializer = VoucherSerializer(data=data)
+
         self.assertFalse(serializer.is_valid())
         self.assertTrue('A valid integer is required.' in serializer.errors['voucher'])
 
     def test_voucher_serializer_invalid_voucher_id(self):
         data  = {'voucher': 100}
+
         serializer = VoucherSerializer(data=data)
+
         self.assertFalse(serializer.is_valid())
         self.assertTrue('Invalid voucher' in serializer.errors['voucher'][0])
