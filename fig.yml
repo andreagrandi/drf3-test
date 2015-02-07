@@ -1,0 +1,24 @@
+db:
+  image: andreagrandi/postgresql:9.3
+web:
+  image: andreagrandi/drftest:latest
+  command: /home/drftest/drftest/run.sh
+  links:
+    - db
+  ports:
+    - "8000:8000"
+  environment:
+    - DRFTEST_ADMIN_NAME=DRF Test
+    - DRFTEST_ADMIN_EMAIL=youremail@provider.com
+    - DRFTEST_DB_ENGINE=django.db.backends.postgresql_psycopg2
+    - DRFTEST_DB_NAME=pgdb
+    - DRFTEST_DB_USER=pguser
+    - DRFTEST_DB_PASSWORD=pguser
+    - DRFTEST_DB_HOST=db
+    - DRFTEST_DB_PORT=5432
+    - DRFTEST_STATIC_ROOT= 
+    - DRFTEST_STATIC_URL=/static/
+    - DRFTEST_STATICFILES_ASSETS=static
+    - DRFTEST_SECRET_KEY=$$changethisdamnnotsecretkey
+    - DRFTEST_DEBUG=True
+    - DRFTEST_ALLOWED_HOSTS=*
