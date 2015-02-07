@@ -2,21 +2,27 @@ import requests
 import json
 import os
 
-# Set the env variable DRFTEST_TOKEN before using this script
-token = os.environ['DRFTEST_TOKEN']
+class ShopClient(object):
+    def __init__(self, base_url='http://drf3test.herokuapp.com/shop/', *args, **kwargs):
+        # Set the env variable DRFTEST_TOKEN before using this script
+        self.token = os.environ['DRFTEST_TOKEN']
+        self.auth_header = {'Authorization': 'Token ' + self.token}
+        self.base_url = base_url
 
-auth_header = {'Authorization': 'Token ' + token}
-base_url = 'http://drf3test.herokuapp.com/shop/'
+    def place_order(self, widget_quantity=1, gizmo_quantity=1):
+        data = [{"product": 1, "quantity": widget_quantity},
+                {"product": 2, "quantity": gizmo_quantity}]
+        url = '{0}orders/'.format(self.base_url)
 
-def place_order():
-    data = [{"product": 1, "quantity": 26}, {"product": 2, "quantity": 30}]
-    r = requests.post(base_url + 'orders/', data=json.dumps(data), headers = auth_header)
-    print r.content
+        r = requests.post(url, data=json.dumps(data), headers = self.auth_header)
+        print r.content
 
-def get_stamps():
-    r = requests.get(base_url + 'stamps/', headers = auth_header)
-    print r.content
+    def get_stamps(self):
+        url = '{0}stamps/'.format(self.base_url)
+        r = requests.get(url, headers = self.auth_header)
+        print r.content
 
-def get_vouchers():
-    r = requests.get(base_url + 'vouchers/', headers = auth_header)
-    print r.content
+    def get_vouchers(self):
+        url = '{0}vouchers/'.format(self.base_url)
+        r = requests.get(url, headers = self.auth_header)
+        print r.content
