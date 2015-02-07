@@ -13,6 +13,7 @@ RUN useradd -m -s /bin/bash -u 1001 -g 1001 drftest
 ADD drftest /home/drftest/drftest/
 ADD requirements.txt /home/drftest/drftest/
 ADD docker/run.sh /home/drftest/drftest/
+RUN chmod +x /home/drftest/drftest/run.sh
 RUN chown -R drftest /home/drftest/drftest/
 RUN chgrp -R drftest /home/drftest/drftest/
 
