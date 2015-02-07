@@ -4,4 +4,4 @@ workon drftest
 cd /home/drftest/drftest/
 ./manage.py migrate
 ./manage.py initshopdb
-./manage.py runserver
+./manage.py runserver 0.0.0.0:8000

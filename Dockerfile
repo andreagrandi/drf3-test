@@ -29,4 +29,4 @@ RUN /bin/bash -c "source /usr/local/bin/virtualenvwrapper.sh \
 USER drftest
 EXPOSE 8000
 WORKDIR /home/drftest/drftest/
-CMD ['run.sh']
+CMD ['/home/drftest/drftest/run.sh']
